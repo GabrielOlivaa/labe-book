@@ -9,7 +9,7 @@ export class UserDatabase extends BaseDatabase {
             .connection(UserDatabase.TABLE_USERS)
             .insert(parameter)
     }
-    async findUser(parameter: string | undefined): Promise<UserDB[]> {
+    public async findUser(parameter: string | undefined): Promise<UserDB[]> {
         let result
 
         if (parameter) {
@@ -26,26 +26,13 @@ export class UserDatabase extends BaseDatabase {
         return result
 
     }
-    private async checkUser(
-        email?: string,
-        password?: string
-    ): Promise<void> {
+    public async check( email: string,password: string ){
         if (email) {
-            const [usersDB]: UserDB[] = await BaseDatabase.connection(
+            const usersDB: UserDB[] = await BaseDatabase.connection(
                 UserDatabase.TABLE_USERS
-            ).where({ email: email })
-            if (usersDB) {
-                throw new Error("'email' ja cadastrado")
-            }
+            ).where({ email,password })
+            return usersDB
         }
-        if (password) {
-            const [usersDB]: UserDB[] = await BaseDatabase.connection(
-                UserDatabase.TABLE_USERS
-            ).where({ email: email })
-            if (usersDB) {
-                throw new Error("'email ja cadastrado'");
-
-            }
-        }
+        
     }
 }
