@@ -150,6 +150,14 @@ app.post("/users/login", async(req:Request, res:Response)=>{
             res.status(400)
             throw new Error ("'password' deve ser string")
         }
+            const check = await userDBI.check(email,password)
+
+                if(check?.length ===0){
+                    res.status(400)
+                    throw new Error("usuario nao encontrado");
+                    
+                }
+
     } catch(error){
         console.log(error)
         
